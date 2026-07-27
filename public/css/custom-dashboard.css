@@ -1,0 +1,1036 @@
+/* ==========================================================================
+   GLOBAL SUPPLY CHAIN RISK INTELLIGENCE PLATFORM
+   Enterprise Dashboard CSS System
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS VARIABLES & THEME DEFINITIONS
+   -------------------------------------------------------------------------- */
+:root {
+    /* Brand & Primary Palette */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #eff6ff;
+    --primary-glow: rgba(37, 99, 235, 0.25);
+    --secondary: #64748b;
+
+    /* Theme Base Colors (Light Mode) */
+    --bg-body: #f1f5f9;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-subtle: #94a3b8;
+    --border-color: rgba(226, 232, 240, 0.8);
+    --border-highlight: rgba(37, 99, 235, 0.3);
+
+    /* Glassmorphism System (Light Mode) */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    --glass-backdrop: blur(16px) saturate(180%);
+
+    /* Risk Indicator Palette (Enterprise Logistics Standard) */
+    /* Low Risk: Emerald */
+    --risk-emerald-main: #10b981;
+    --risk-emerald-bg: rgba(16, 185, 129, 0.12);
+    --risk-emerald-border: rgba(16, 185, 129, 0.3);
+    --risk-emerald-text: #047857;
+
+    /* Medium Risk: Amber */
+    --risk-amber-main: #f59e0b;
+    --risk-amber-bg: rgba(245, 158, 11, 0.12);
+    --risk-amber-border: rgba(245, 158, 11, 0.3);
+    --risk-amber-text: #b45309;
+
+    /* High Risk: Crimson */
+    --risk-crimson-main: #ef4444;
+    --risk-crimson-bg: rgba(239, 68, 68, 0.12);
+    --risk-crimson-border: rgba(239, 68, 68, 0.3);
+    --risk-crimson-text: #b91c1c;
+
+    /* Elevation & Shadows */
+    --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 6px 18px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 16px 36px -4px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+    --shadow-hover: 0 20px 40px -6px rgba(15, 23, 42, 0.14), 0 8px 16px -4px rgba(37, 99, 235, 0.12);
+
+    /* Layout Dimensions */
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 84px;
+    --topbar-height: 72px;
+    --border-radius-sm: 10px;
+    --border-radius-md: 16px;
+    --border-radius-lg: 24px;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   DARK MODE OVERRIDES ([data-theme="dark"] or body.dark-mode)
+   -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   DARK MODE OVERRIDES ([data-theme="dark"] or body.dark-mode)
+   -------------------------------------------------------------------------- */
+[data-theme="dark"], html[data-theme="dark"], body.dark-mode, html.dark-mode {
+    --body-bg: #0b0f19;
+    --card-bg: #111827;
+    --text-dark: #f8fafc;
+
+    --bg-body: #0b0f19;
+    --bg-surface: #111827;
+    --bg-surface-elevated: #1f2937;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(59, 130, 246, 0.4);
+
+    /* Glassmorphism System (Dark Mode) */
+    --glass-bg: rgba(17, 24, 39, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+
+    /* Risk Overrides for High Contrast Dark Mode */
+    --risk-emerald-text: #34d399;
+    --risk-amber-text: #fbbf24;
+    --risk-crimson-text: #f87171;
+
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 20px rgba(37, 99, 235, 0.25);
+}
+
+[data-theme="dark"] body, body.dark-mode {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .main-content, [data-theme="dark"] .main-wrapper, body.dark-mode .main-content {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .top-header, body.dark-mode .top-header {
+    background-color: rgba(17, 24, 39, 0.85) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .top-header h1, body.dark-mode .top-header h1 {
+    color: #f8fafc !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. GLOBAL & BASE TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-subtle);
+    border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   3. GLASSMORPHISM CONTAINER UTILITIES
+   -------------------------------------------------------------------------- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--border-highlight);
+}
+
+.glass-header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* --------------------------------------------------------------------------
+   4. LAYOUT: SIDEBAR, HEADER & MAIN WRAPPER
+   -------------------------------------------------------------------------- */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Sidebar Styling */
+.app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    z-index: 1040;
+    transition: var(--transition-smooth);
+}
+
+/* Collapsed Sidebar Mode */
+.app-sidebar.collapsed {
+    width: var(--sidebar-width-collapsed);
+}
+
+.app-sidebar.collapsed .sidebar-text,
+.app-sidebar.collapsed .sidebar-badge,
+.app-sidebar.collapsed .menu-section-label,
+.app-sidebar.collapsed .sidebar-user-info {
+    display: none !important;
+    opacity: 0;
+}
+
+.app-sidebar.collapsed .sidebar-brand-text {
+    display: none;
+}
+
+.app-sidebar.collapsed .sidebar-brand {
+    justify-content: center;
+    padding: 0;
+}
+
+.app-sidebar.collapsed .menu-item {
+    justify-content: center;
+    padding: 0.85rem;
+}
+
+/* Sidebar Brand Header */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+}
+
+.sidebar-brand-logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--primary), #1d4ed8);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 14px var(--primary-glow);
+    flex-shrink: 0;
+}
+
+.sidebar-brand-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.sidebar-brand-subtitle {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* Sidebar Navigation Menu */
+.menu-section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    padding: 0.75rem 0.75rem 0.35rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.925rem;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.menu-item:hover {
+    color: var(--primary);
+    background: var(--primary-light);
+    transform: translateX(4px);
+}
+
+[data-theme="dark"] .menu-item:hover {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.menu-item.active {
+    color: #ffffff;
+    background: var(--primary);
+    box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.menu-item.active .menu-icon {
+    color: #ffffff;
+}
+
+.menu-icon {
+    font-size: 1.25rem;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Sidebar User Footer Profile */
+.sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.sidebar-user-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+}
+
+.sidebar-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    color: #ffffff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Main Content Wrapper */
+.main-wrapper {
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition-smooth);
+}
+
+.main-wrapper.expanded {
+    margin-left: var(--sidebar-width-collapsed);
+}
+
+/* Top Navigation Header */
+.top-header {
+    height: var(--topbar-height);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-search {
+    position: relative;
+    width: 320px;
+}
+
+.header-search input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    border-radius: 99px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-size: 0.875rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.header-search input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.header-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-subtle);
+}
+
+/* Quick Action Buttons Header */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-icon-square {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.btn-icon-square:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary-glow);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .btn-icon-square:hover {
+    background: rgba(37, 99, 235, 0.2);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--risk-crimson-main);
+    box-shadow: 0 0 0 2px var(--bg-surface);
+}
+
+/* --------------------------------------------------------------------------
+   5. RISK INDICATOR PALETTES & BADGES
+   -------------------------------------------------------------------------- */
+.badge-risk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.badge-risk::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+/* Low Risk (Emerald) */
+.badge-risk-low {
+    background: var(--risk-emerald-bg);
+    color: var(--risk-emerald-text);
+    border: 1px solid var(--risk-emerald-border);
+}
+.badge-risk-low::before {
+    background: var(--risk-emerald-main);
+    box-shadow: 0 0 6px var(--risk-emerald-main);
+}
+
+/* Medium Risk (Amber) */
+.badge-risk-medium {
+    background: var(--risk-amber-bg);
+    color: var(--risk-amber-text);
+    border: 1px solid var(--risk-amber-border);
+}
+.badge-risk-medium::before {
+    background: var(--risk-amber-main);
+    box-shadow: 0 0 6px var(--risk-amber-main);
+}
+
+/* High Risk (Crimson) */
+.badge-risk-high {
+    background: var(--risk-crimson-bg);
+    color: var(--risk-crimson-text);
+    border: 1px solid var(--risk-crimson-border);
+}
+.badge-risk-high::before {
+    background: var(--risk-crimson-main);
+    box-shadow: 0 0 6px var(--risk-crimson-main);
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   6. METRIC GRID CARDS (STATISTICS)
+   -------------------------------------------------------------------------- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    position: relative;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.metric-card-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #6366f1);
+}
+
+.metric-card.accent-low .metric-card-accent-bar {
+    background: linear-gradient(90deg, var(--risk-emerald-main), #34d399);
+}
+
+.metric-card.accent-medium .metric-card-accent-bar {
+    background: linear-gradient(90deg, var(--risk-amber-main), #fbbf24);
+}
+
+.metric-card.accent-high .metric-card-accent-bar {
+    background: linear-gradient(90deg, var(--risk-crimson-main), #f87171);
+}
+
+.metric-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.metric-label {
+    font-size: 0.825rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.metric-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.metric-value-group {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.metric-number {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+    line-height: 1.1;
+}
+
+.metric-subtext {
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    margin-top: 0.25rem;
+}
+
+.metric-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+}
+
+.metric-trend.trend-up {
+    color: var(--risk-emerald-text);
+    background: var(--risk-emerald-bg);
+}
+
+.metric-trend.trend-down {
+    color: var(--risk-crimson-text);
+    background: var(--risk-crimson-bg);
+}
+
+/* --------------------------------------------------------------------------
+   7. LEAFLET MAP PRECISION CONTAINER & POPUPS
+   -------------------------------------------------------------------------- */
+.map-card-container {
+    position: relative;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.map-header-bar {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.map-wrapper-inner {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    overflow: hidden;
+}
+
+#map, #riskMap {
+    width: 100%;
+    height: 480px;
+    min-height: 480px;
+    display: block;
+    border-radius: var(--border-radius-md);
+    z-index: 1;
+}
+
+
+/* Map Controls Floating Overlay */
+.map-overlay-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    display: flex;
+    gap: 0.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    padding: 0.4rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-md);
+}
+
+.map-filter-btn {
+    border: none;
+    background: transparent;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.map-filter-btn:hover, .map-filter-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+/* Custom Leaflet Popup Box Styling */
+.leaflet-popup-content-wrapper {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    -webkit-backdrop-filter: var(--glass-backdrop) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: 0.25rem !important;
+}
+
+.leaflet-popup-tip {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+.custom-leaflet-popup {
+    padding: 0.5rem 0.25rem;
+    min-width: 220px;
+}
+
+.custom-leaflet-popup .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.custom-leaflet-popup .popup-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.custom-leaflet-popup .popup-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.custom-leaflet-popup .popup-stat-item {
+    background: var(--bg-surface-elevated);
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75rem;
+}
+
+.custom-leaflet-popup .popup-stat-label {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    display: block;
+}
+
+.custom-leaflet-popup .popup-stat-val {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.custom-leaflet-popup .popup-btn {
+    width: 100%;
+    padding: 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--border-radius-sm);
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition-smooth);
+}
+
+.custom-leaflet-popup .popup-btn:hover {
+    background: var(--primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   8. NEWS INTELLIGENCE FEED & WATCHLIST
+   -------------------------------------------------------------------------- */
+.dashboard-twin-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 991px) {
+    .dashboard-twin-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Newsfeed Intelligence List */
+.newsfeed-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.news-card-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.1rem;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.news-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-highlight);
+}
+
+.news-card-badge {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.news-card-content {
+    flex-grow: 1;
+}
+
+.news-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--text-subtle);
+}
+
+.news-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.35rem;
+    line-height: 1.35;
+}
+
+.news-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.news-card-title a:hover {
+    color: var(--primary);
+}
+
+.news-card-snippet {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Watchlist Item Card */
+.watchlist-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.watchlist-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
+}
+
+.watchlist-item-card:hover {
+    border-color: var(--border-highlight);
+    box-shadow: var(--shadow-sm);
+}
+
+.watchlist-flag-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.watchlist-flag-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.watchlist-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--text-main);
+}
+
+.watchlist-region {
+    font-size: 0.75rem;
+    color: var(--text-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   9. TABLES & FORM CONTROLS
+   -------------------------------------------------------------------------- */
+.custom-table-card {
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--text-main);
+}
+
+.table-custom th {
+    background: var(--bg-surface-elevated);
+    padding: 0.9rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-custom td {
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    transition: background 0.2s ease;
+}
+
+.table-custom tbody tr:hover td {
+    background: var(--primary-light);
+}
+
+[data-theme="dark"] .table-custom tbody tr:hover td {
+    background: rgba(37, 99, 235, 0.1);
+}
+
+/* Buttons System */
+.btn-enterprise {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--border-radius-sm);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: var(--transition-smooth);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-enterprise-primary {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.btn-enterprise-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+.btn-enterprise-outline {
+    background: transparent;
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-enterprise-outline:hover {
+    background: var(--bg-surface-elevated);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   10. RESPONSIVE BREAKPOINTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .app-sidebar.show-mobile {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .main-wrapper, .main-wrapper.expanded {
+        margin-left: 0 !important;
+    }
+
+    .top-header {
+        padding: 0 1rem;
+    }
+
+    .header-search {
+        width: 200px;
+    }
+}
+
+@media (max-width: 640px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-search {
+        display: none;
+    }
+}
