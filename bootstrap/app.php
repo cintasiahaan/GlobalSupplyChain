@@ -38,6 +38,21 @@ return Application::configure(
         |
         */
 
+        /*
+        |--------------------------------------------------------------------------
+        | TRUST RAILWAY REVERSE PROXY
+        |--------------------------------------------------------------------------
+        |
+        | Railway (and most hosting platforms) sit behind a reverse proxy.
+        | We must trust all proxies so Laravel correctly detects HTTPS
+        | and generates secure URLs — preventing the browser's
+        | "information not secure" warning on form submissions.
+        |
+        */
+
+        $middleware->trustProxies(at: '*');
+
+
         $middleware->alias([
 
             'role' => RoleMiddleware::class,
