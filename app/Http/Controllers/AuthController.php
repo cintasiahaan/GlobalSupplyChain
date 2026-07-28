@@ -75,15 +75,17 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         try {
-            \App\Models\UserLoginLog::create([
-                'user_id' => Auth::id(),
-                'user_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-                'role' => Auth::user()->role ?? 'user',
-                'ip_address' => $request->ip(),
-                'user_agent' => substr($request->userAgent() ?? '', 0, 255),
-                'logged_in_at' => now(),
-            ]);
+            if (Auth::user()->role !== 'admin') {
+                \App\Models\UserLoginLog::create([
+                    'user_id' => Auth::id(),
+                    'user_name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
+                    'role' => Auth::user()->role ?? 'user',
+                    'ip_address' => $request->ip(),
+                    'user_agent' => substr($request->userAgent() ?? '', 0, 255),
+                    'logged_in_at' => now(),
+                ]);
+            }
         } catch (\Throwable $e) {
             // Ignore log creation errors to prevent blocking login
         }
@@ -203,11 +205,25 @@ class AuthController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | REGENERATE SESSION
+        | REGENERATE SESSION & RECORD LOGIN LOG
         |--------------------------------------------------------------------------
         */
 
         $request->session()->regenerate();
+
+        try {
+            \App\Models\UserLoginLog::create([
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role ?? 'user',
+                'ip_address' => $request->ip(),
+                'user_agent' => substr($request->userAgent() ?? '', 0, 255),
+                'logged_in_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore log creation errors to prevent blocking registration
+        }
 
 
         /*

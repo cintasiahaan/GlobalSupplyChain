@@ -11,14 +11,14 @@
                 🔐 User Login Activity Monitoring
             </h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
-                Pemantauan real-time aktivitas login pengguna & administrator ke sistem.
+                Pemantauan real-time aktivitas login pengguna terdaftar (User) ke sistem.
             </p>
         </div>
 
         <div style="display: flex; gap: 1rem;">
             <div class="glass-card" style="padding: 0.6rem 1.25rem; text-align: center;">
                 <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">{{ $totalLogins }}</div>
-                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Sesi Login</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Sesi Login User</div>
             </div>
             <div class="glass-card" style="padding: 0.6rem 1.25rem; text-align: center;">
                 <div style="font-size: 1.2rem; font-weight: 800; color: var(--risk-emerald-main);">{{ $uniqueUsersCount }}</div>
@@ -32,22 +32,14 @@
 <div class="glass-card mb-4" style="padding: 1rem 1.5rem;">
     <form method="GET" action="{{ route('admin.user-logs.index') }}" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
         <div style="flex-grow: 1; min-width: 240px;">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, email, atau IP address..." class="form-control" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); color: var(--text-main);">
-        </div>
-
-        <div>
-            <select name="role" style="padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); color: var(--text-main);">
-                <option value="">-- Semua Role --</option>
-                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin Only</option>
-                <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>User Only</option>
-            </select>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama user, email, atau IP address..." class="form-control" style="width: 100%; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); color: var(--text-main);">
         </div>
 
         <button type="submit" class="btn-enterprise btn-enterprise-primary" style="padding: 0.6rem 1.25rem;">
             🔍 Filter Log
         </button>
 
-        @if(request()->hasAny(['search', 'role']))
+        @if(request()->filled('search'))
             <a href="{{ route('admin.user-logs.index') }}" class="btn-enterprise btn-enterprise-outline" style="padding: 0.6rem 1rem;">
                 Reset
             </a>

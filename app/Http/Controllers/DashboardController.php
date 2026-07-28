@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\Port;
 use App\Models\RiskAssessment;
 
 class DashboardController extends Controller
@@ -48,6 +49,9 @@ class DashboardController extends Controller
         // Seluruh negara beserta risk assessment-nya (untuk peta)
         $allCountries = Country::with('riskAssessment')->get();
 
+        // Data pelabuhan untuk overlay peta
+        $allPorts = Port::all();
+
 
         // 5 negara dengan risiko tertinggi
         $topHighRiskCountries = Country::with(
@@ -88,6 +92,7 @@ class DashboardController extends Controller
                 'globalRiskScore',
                 'globalRiskLevel',
                 'allCountries',
+                'allPorts',
                 'topHighRiskCountries',
                 'riskDistribution'
             )

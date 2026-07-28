@@ -119,24 +119,24 @@
                     🗺️ Interactive Global Risk Map
                 </h3>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
-                    Pemetaan geotagging tingkat risiko negara & status pelabuhan.
+                    Pemetaan geotagging tingkat risiko <strong>{{ count($allCountries) }} negara</strong> & status pelabuhan maritim.
                 </p>
             </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <span class="badge-risk badge-risk-low">Emerald: Low</span>
-                <span class="badge-risk badge-risk-medium">Amber: Medium</span>
-                <span class="badge-risk badge-risk-high">Crimson: High</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="badge-risk badge-risk-low legend-filter-btn" onclick="filterMap('low')" style="border: none; cursor: pointer; transition: transform 0.15s ease;" title="Klik untuk filter negara Low Risk">🟢 Emerald: Low</button>
+                <button type="button" class="badge-risk badge-risk-medium legend-filter-btn" onclick="filterMap('medium')" style="border: none; cursor: pointer; transition: transform 0.15s ease;" title="Klik untuk filter negara Medium Risk">🟡 Amber: Medium</button>
+                <button type="button" class="badge-risk badge-risk-high legend-filter-btn" onclick="filterMap('high')" style="border: none; cursor: pointer; transition: transform 0.15s ease;" title="Klik untuk filter negara High Risk">🔴 Crimson: High</button>
             </div>
         </div>
 
-        <div class="map-wrapper-inner">
+        <div class="map-wrapper-inner" style="position: relative;">
             <!-- Map Filter Floating Overlay -->
-            <div class="map-overlay-controls">
-                <button type="button" class="map-filter-btn active" onclick="filterMap('all')">All Regions</button>
-                <button type="button" class="map-filter-btn" onclick="filterMap('high')">High Risk</button>
-                <button type="button" class="map-filter-btn" onclick="filterMap('ports')">Ports</button>
+            <div class="map-overlay-controls" style="z-index: 1000;">
+                <button type="button" class="map-filter-btn active" data-filter="all" onclick="filterMap('all')">All Regions (48)</button>
+                <button type="button" class="map-filter-btn" data-filter="high" onclick="filterMap('high')">High Risk</button>
+                <button type="button" class="map-filter-btn" data-filter="ports" onclick="filterMap('ports')">Ports Layer</button>
             </div>
-            <div id="map" style="width: 100%; height: 480px; position: relative; z-index: 1;"></div>
+            <div id="map" style="width: 100%; height: 480px; position: relative; z-index: 1; border-radius: 12px; overflow: hidden;"></div>
         </div>
     </div>
 
@@ -381,6 +381,10 @@
 
 <!-- LEAFLET & CHART INIT SCRIPTS -->
 <script>
+let leafletMap = null;
+let countryMarkers = [];
+let portMarkers = [];
+
 document.addEventListener('DOMContentLoaded', function () {
     // CHART.JS DOUGHNUT INITIALIZATION
     const ctx = document.getElementById('riskDistributionChart').getContext('2d');
@@ -423,19 +427,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // LEAFLET MAP INITIALIZATION
     const mapElement = document.getElementById('map') || document.getElementById('riskMap');
     if (mapElement && typeof L !== 'undefined') {
-        const map = L.map(mapElement, { scrollWheelZoom: false }).setView([20, 0], 2);
+        leafletMap = L.map(mapElement, { scrollWheelZoom: false }).setView([20, 0], 2);
 
         // Standard Reliable OpenStreetMap Tile Layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        }).addTo(leafletMap);
 
         // Force Leaflet map to recalculate dimensions after rendering
         setTimeout(function() {
-            map.invalidateSize();
+            leafletMap.invalidateSize();
         }, 300);
 
+        // Render all 48 Monitored Country Markers
         const countries = @json($allCountries);
 
         countries.forEach(function (country) {
@@ -451,7 +456,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 color = '#f59e0b'; // Amber for Medium Risk
             }
 
-            // Custom Circle Marker with gradient glow effect
             let circle = L.circleMarker([country.latitude, country.longitude], {
                 radius: riskLevel === 'High' ? 11 : 8,
                 fillColor: color,
@@ -459,14 +463,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 weight: 2,
                 opacity: 1,
                 fillOpacity: 0.9
-            }).addTo(map);
+            });
 
-            // Precision Custom HTML Leaflet Popup
+            // Store metadata on marker for filtering
+            circle.riskLevel = riskLevel.toLowerCase();
+            circle.markerType = 'country';
+
             const popupContent = `
                 <div class="custom-leaflet-popup">
                     <div class="popup-header">
                         <div class="popup-title">🌐 ${country.name}</div>
-                        <span class="badge-risk badge-risk-${riskLevel.toLowerCase()}">${riskLevel}</span>
+                        <span class="badge-risk badge-risk-${riskLevel.toLowerCase()}">${riskLevel} Risk</span>
                     </div>
                     <div class="popup-stat-grid">
                         <div class="popup-stat-item">
@@ -485,15 +492,100 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             circle.bindPopup(popupContent);
+            circle.addTo(leafletMap);
+            countryMarkers.push(circle);
+        });
+
+        // Render Port Markers for Overlay Layer
+        const ports = @json($allPorts ?? []);
+        ports.forEach(function (port) {
+            if (port.latitude === null || port.longitude === null) return;
+
+            let statusColor = '#06b6d4'; // Cyan for Ports
+            if (port.status === 'Closed') {
+                statusColor = '#ef4444';
+            } else if (port.status === 'Delayed') {
+                statusColor = '#f59e0b';
+            }
+
+            let portCircle = L.circleMarker([port.latitude, port.longitude], {
+                radius: 9,
+                fillColor: statusColor,
+                color: '#ffffff',
+                weight: 2.5,
+                opacity: 1,
+                fillOpacity: 0.85
+            });
+
+            portCircle.riskLevel = (port.risk_level ?? 'low').toLowerCase();
+            portCircle.markerType = 'port';
+
+            const portPopup = `
+                <div class="custom-leaflet-popup">
+                    <div class="popup-header">
+                        <div class="popup-title">⚓ ${port.port_name}</div>
+                        <span class="badge-risk badge-risk-${(port.risk_level ?? 'low').toLowerCase()}">${port.status}</span>
+                    </div>
+                    <div class="popup-stat-grid">
+                        <div class="popup-stat-item">
+                            <span class="popup-stat-label">Country / City</span>
+                            <span class="popup-stat-val">${port.country} (${port.city ?? '-'})</span>
+                        </div>
+                        <div class="popup-stat-item">
+                            <span class="popup-stat-label">Delay Hours</span>
+                            <span class="popup-stat-val">${port.delay_hours} hrs</span>
+                        </div>
+                    </div>
+                    <a href="/ports">
+                        <button class="popup-btn">Open Port Directory ➔</button>
+                    </a>
+                </div>
+            `;
+
+            portCircle.bindPopup(portPopup);
+            portMarkers.push(portCircle);
         });
     }
-
 });
 
-// Map Filter Handler Placeholder
+// Interactive Dynamic Map Filter Function
 function filterMap(category) {
-    document.querySelectorAll('.map-filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (!leafletMap) return;
+
+    category = category.toLowerCase();
+
+    // Update active button state
+    document.querySelectorAll('.map-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    if (category === 'all') {
+        // Show all 48 country markers, hide ports
+        countryMarkers.forEach(m => leafletMap.addLayer(m));
+        portMarkers.forEach(m => leafletMap.removeLayer(m));
+    } else if (category === 'ports') {
+        // Hide countries, show all port markers
+        countryMarkers.forEach(m => leafletMap.removeLayer(m));
+        portMarkers.forEach(m => leafletMap.addLayer(m));
+    } else if (['high', 'medium', 'low'].includes(category)) {
+        // Filter countries by risk level (high / medium / low)
+        countryMarkers.forEach(m => {
+            if (m.riskLevel === category) {
+                leafletMap.addLayer(m);
+            } else {
+                leafletMap.removeLayer(m);
+            }
+        });
+        portMarkers.forEach(m => leafletMap.removeLayer(m));
+    }
+
+    setTimeout(function() {
+        leafletMap.invalidateSize();
+    }, 100);
 }
 </script>
 

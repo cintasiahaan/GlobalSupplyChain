@@ -376,19 +376,6 @@
                 <p>Masukkan akun Anda untuk mengakses dasbor risiko.</p>
             </div>
 
-            <!-- DEMO LOGIN QUICK FILL -->
-            <div class="demo-box">
-                <div class="demo-box-label">⚡ Demo Quick Fill (Pilih Akun):</div>
-                <div class="demo-buttons">
-                    <button type="button" class="btn-demo" onclick="fillCreds('admin@gmail.com', 'admin123')">
-                        🛠️ Admin Account
-                    </button>
-                    <button type="button" class="btn-demo" onclick="fillCreds('user@gmail.com', 'user123')">
-                        👤 User Account
-                    </button>
-                </div>
-            </div>
-
             @if(session('success'))
                 <div class="success-box">
                     ✅ {{ session('success') }}
@@ -441,13 +428,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function fillCreds(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-        }
-    </script>
 
 </body>
 
