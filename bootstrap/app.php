@@ -28,6 +28,25 @@ return Application::configure(
 
         /*
         |--------------------------------------------------------------------------
+        | TRUST PROXIES (Railway / reverse proxy hosting)
+        |--------------------------------------------------------------------------
+        |
+        | Railway sits behind a load balancer. Trusting all proxies ensures
+        | Laravel detects HTTPS correctly and generates secure URLs.
+        |
+        */
+
+        $middleware->trustProxies(
+            at: '*',
+            headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
+                | \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
         | ROLE MIDDLEWARE
         |--------------------------------------------------------------------------
         |
@@ -37,21 +56,6 @@ return Application::configure(
         | role:user
         |
         */
-
-        /*
-        |--------------------------------------------------------------------------
-        | TRUST RAILWAY REVERSE PROXY
-        |--------------------------------------------------------------------------
-        |
-        | Railway (and most hosting platforms) sit behind a reverse proxy.
-        | We must trust all proxies so Laravel correctly detects HTTPS
-        | and generates secure URLs — preventing the browser's
-        | "information not secure" warning on form submissions.
-        |
-        */
-
-        $middleware->trustProxies(at: '*');
-
 
         $middleware->alias([
 
@@ -71,8 +75,6 @@ return Application::configure(
         |--------------------------------------------------------------------------
         |
         | Explicitly redirect unauthenticated users to the login page.
-        | This must be handled BEFORE the generic debug renderer so it
-        | is not swallowed and shown as a plain error page.
         |
         */
 
