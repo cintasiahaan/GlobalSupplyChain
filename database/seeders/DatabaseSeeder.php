@@ -1,1 +1,22 @@
-https://globalsupplychain-production-4be9.up.railway.app/
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            CountrySeeder::class,
+            RiskAssessmentSeeder::class,
+            RiskLevelSeeder::class,
+            NewsSeeder::class,
+            PortSeeder::class,
+        ]);
+    }
+}
