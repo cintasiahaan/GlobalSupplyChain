@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "export SESSION_DRIVER=file; mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs && chmod -R 777 storage bootstrap/cache || true; php artisan config:clear || true; php artisan view:clear || true; php artisan migrate --force || true; php artisan db:seed --force || true; exec php artisan serve --host=0.0.0.0 --port=$PORT",
+    "startCommand": "export SESSION_DRIVER=file; mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs && chmod -R 777 storage bootstrap/cache || true; php artisan config:clear || true; php artisan view:clear || true; touch database/database.sqlite || true; php artisan migrate --force || true; php artisan db:seed --force || true; exec php artisan serve --host=0.0.0.0 --port=$PORT",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
