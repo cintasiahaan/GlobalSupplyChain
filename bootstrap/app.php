@@ -50,7 +50,9 @@ return Application::configure(
         Exceptions $exceptions
     ) {
 
-        //
+        $exceptions->render(function (\Throwable $e) {
+            return response('<pre style="color:#ef4444;background:#0f172a;padding:24px;font-size:14px;white-space:pre-wrap;font-family:monospace;">' . e($e->getMessage() . "\n\n" . $e->getTraceAsString()) . '</pre>', 500);
+        });
 
     })
 
