@@ -50,8 +50,26 @@ return Application::configure(
         Exceptions $exceptions
     ) {
 
-        $exceptions->render(function (\Throwable $e) {
-            return response('<pre style="color:#ef4444;background:#0f172a;padding:24px;font-size:14px;white-space:pre-wrap;font-family:monospace;">' . e($e->getMessage() . "\n\n" . $e->getTraceAsString()) . '</pre>', 500);
+        /*
+        |--------------------------------------------------------------------------
+        | AUTHENTICATION EXCEPTION → REDIRECT TO LOGIN
+        |--------------------------------------------------------------------------
+        |
+        | Explicitly redirect unauthenticated users to the login page.
+        | This must be handled BEFORE the generic debug renderer so it
+        | is not swallowed and shown as a plain error page.
+        |
+        */
+
+        $exceptions->render(function (
+            \Illuminate\Auth\AuthenticationException $e,
+            \Illuminate\Http\Request $request
+        ) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+
+            return redirect()->guest(route('login'));
         });
 
     })
